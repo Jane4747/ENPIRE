@@ -47,6 +47,23 @@ The JAX PLD learner has an isolated project under
 `enpire/policy/pld/runtime`; do not merge its lock into the root environment.
 Local cuRobo is the explicit `planning-local` root extra.
 
+## Cloud Agent environment
+
+The saved Cloud Agent install is hardware-free. It puts `uv` on the default
+`PATH`, installs Python 3.11, initializes `third_party/curobo` before any `uv`
+command, and syncs:
+
+```bash
+uv sync --extra dev --extra control-yam --extra vision --extra camera-realsense
+```
+
+`control-yam`, `vision`, and `camera-realsense` are included so
+`uv run pytest -q tests/enpire` can import kinematics, OpenCV, and
+`pyrealsense2`. CUDA extras (`planning-local`, `vision-local`,
+`grasping-local`, `real-rl`), licensed AnyGrasp files, and the isolated PLD
+runtime are not installed. Because `uv sync` replaces extras, keep this full
+set in one command.
+
 ## Repository map
 
 ```text
